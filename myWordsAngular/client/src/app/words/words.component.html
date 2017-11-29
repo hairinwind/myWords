@@ -1,0 +1,33 @@
+<div class="container" *ngFor="let wordCount of wordsCount; let i = index">
+	<div class="box box-default">
+		<div class="box-header with-border">
+			<h3 class="box-title">{{wordCount.key}}</h3>
+			<h3 class="box-title">{{wordCount.doc_count}}</h3>
+			<div class="box-tools pull-right">
+				<button class="btn btn-box-tool" (click)="red(wordCount.key, i)">
+					<i class="fa fa-circle text-danger" aria-hidden="true"></i>
+				</button>
+				<button class="btn btn-box-tool" (click)="yellow(wordCount.key, i)">
+					<i class="fa fa-circle text-warning" aria-hidden="true"></i>
+				</button>
+				<button class="btn btn-box-tool" (click)="green(wordCount.key, i)">
+					<i class="fa fa-circle text-success" aria-hidden="true"></i>
+				</button>
+				<button class="btn btn-box-tool" (click)="addToIgnoreList(wordCount.key, i)">
+					<i class="fa fa-circle text-muted" aria-hidden="true"></i>
+				</button>
+				<button class="btn btn-box-tool" (click)="getSentences(wordCount.key, i)">
+					<i class="fa fa-plus"></i>
+				</button>
+			</div>
+		</div>
+		<div class="box-body">
+			<ul *ngFor="let setence of wordCount.sentences">
+				<li class="item">
+					{{setence.english}}
+					{{setence.chinese}}
+				</li>
+			</ul>
+		</div>
+	</div>	
+</div>

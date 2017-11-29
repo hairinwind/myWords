@@ -1,0 +1,22 @@
+{
+  "name": "mywords",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yao",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "ejs": "^2.5.6",
+    "elasticsearch": "^13.0.0-rc2",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "helmet": "^3.5.0",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "ramda": "^0.23.0"
+  }
+}

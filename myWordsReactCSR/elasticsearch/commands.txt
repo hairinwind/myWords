@@ -1,0 +1,106 @@
+# delete index
+DELETE /words_v2
+
+#put mapping words_v2
+PUT /words_v2
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "extended_english_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": [
+            "english_possessive_stemmer",
+            "lowercase",
+            "english_stop",
+            "my_pre_stop",
+            "porter_stem",
+            "my_stop"
+          ]
+        }
+      },
+      "filter": {
+        "my_pre_stop" : {
+          "type":"stop",
+          "stopwords":["i","me","we","us","you","she","her","him","he","it","they","the", "them", "those","myself","ourselves","yourself","yourselves","himself","herself","itself","themselves","what","who","which","whom","whose","my","your","his","her","its","our","their","mine","yours","hers","ours","yours","theirs", "has", "have", "had", "having", "do","did","done","yes","no","can","could","may","might","must","need","ought","shall","should","would", "i'm", "don't","we're","you're","can't","they're","i'll","we've","didn't","doesn't","i'd","i've","wasn't","we'll","you'll","isn't","they've","you've","aren't","couldn't","hasn't","he'll","they'll","you'd","ain't","haven't","she'll","won't","wouldn't", "0","1","2","3","4","5","6","7","8","9"]
+        },
+        "my_stop" : {
+          "type":"stop",
+          "stopwords":["have"]
+        },
+        "english_possessive_stemmer": {
+          "type":       "stemmer",
+          "language":   "possessive_english"
+        }, 
+        "english_stop": {
+          "type":       "stop",
+          "stopwords":  "_english_" 
+        }
+      }
+    }
+  },
+  "mappings": {
+    "words":{
+      "properties": {
+        "english": {
+          "type":     "text", 
+          "analyzer": "extended_english_analyzer", 
+          "fielddata": true
+        }, 
+        "chinese": {
+          "type": "text"
+        },
+        "sourceTitle": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}
+
+# set alias
+POST /_aliases
+{
+    "actions" : [
+        { "add" : { "index" : "words_v1", "alias" : "myWords" } }
+    ]
+}
+
+# put userFamilarity
+PUT /words_v2/_mapping/userFamilarity
+{
+  "properties": {
+    "user": {
+      "type": "keyword"
+    }, 
+    "words" : {
+      "type": "keyword"
+    },
+    "familarity" : {
+      "type": "short"
+    }, 
+    "date":{ 
+      "type": "date",
+      "format": "date_time"    
+    }
+  }
+}
+
+# copy data from one index to another
+POST /_reindex
+{
+  "source" : {
+    "index" : "words_v1"
+  },
+  "dest":{
+    "index":"words_v2"
+  }
+}
+
+# Delete by query
+POST /words_v2/words/_delete_by_query
+{"query": {
+  "match_all" : {}
+  }
+}
